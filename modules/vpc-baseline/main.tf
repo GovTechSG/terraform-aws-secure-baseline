@@ -14,17 +14,8 @@ resource "aws_default_route_table" "default" {
   }
 }
 
-resource "aws_default_subnet" "default" {
-  count = "${length(data.aws_availability_zones.available.names)}"
-
-  availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
-}
-
-// Reattach default subnets to the default netowrk ACL to avoid the known issue below.
-// https://github.com/hashicorp/terraform/issues/9824
 resource "aws_default_network_acl" "default" {
   default_network_acl_id = "${aws_default_vpc.default.default_network_acl_id}"
-  subnet_ids             = ["${aws_default_subnet.default.*.id}"]
 
   tags {
     Name = "Default Network ACL"
