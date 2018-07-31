@@ -20,6 +20,10 @@ resource "aws_default_network_acl" "default" {
   tags {
     Name = "Default Network ACL"
   }
+
+  lifecycle {
+    ignore_changes = ["subnet_ids"]
+  }
 }
 
 resource "aws_default_security_group" "default" {
